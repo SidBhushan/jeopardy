@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jeopardy!</title>
+    <link rel="stylesheet" href="/public/home/home.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <img src="/qr" id="qr">
+
+    <h1>Scan QR Code to Join</h1>
+    <canvas width="330px" height="330px" id="qrcanvas"></canvas>
+
+    <div id="names">
+
+    </div>
+
+    <a href="/board"><h1>Start!</h1></a>
+
+    <!--Canvas Image-->
+    <script>
+        const context = document.getElementById('qrcanvas').getContext('2d')
+        const img = document.getElementById('qr')
+        context.drawImage(img, 0, 0)
+
+        let imageData = context.getImageData(0, 0, 330, 330)
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            if (imageData.data[i] == 0 && imageData.data[i+1] == 0 && imageData.data[i+2] == 0) {
+                imageData.data[i] = 0xdd
+                imageData.data[i+1] = 0xdd
+                imageData.data[i+2] = 0xdd
+            } else if (imageData.data[i] == 255 && imageData.data[i+1] == 255 && imageData.data[i+2] == 255) {
+                imageData.data[i] = 0x0
+                imageData.data[i+1] = 0x0
+                imageData.data[i+2] = 0x3a
+            }
+        }
+        context.putImageData(imageData, 0, 0)
+    </script>
+
+    <!--Names Script-->
+    <script>
+        const socket = io()
+        const names = document.getElementById('names')
+        let numNames = 0
+        let namesArray = []
+        socket.on('login', user => {
+            console.log(user + ' logged in')
+            let name = document.createElement('div')
+            name.classList.add('name')
+            name.dataset.id = user
+            fetch('/api/user/' + user).then(response => {
+                response.text().then(text => {
+                    let image = document.createElement('img')
+                    image.src = decodeURIComponent(text)
+                    name.appendChild(image)
+                    names.appendChild(name)
+                })
+            })
+        })
+        socket.on('unlogin', user => {
+            console.log(user + ' disconnected')
+            let images = names.children
+            for (let img of images) {
+                if (img.dataset.id == user) {
+                    img.parentNode.removeChild(img)
+                }
+            }
+        })
+    </script>
+</body>
+</html>

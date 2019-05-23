@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jeopardy!</title>
+    <link href="https://fonts.googleapis.com/css?family=Forum" rel="stylesheet">
+    <style>
+        body {
+            color: white;
+            background-color: #00003A;
+        }
+        .wrapper {
+            display: grid;
+            grid-auto-columns: 1fr;
+            text-align: center;
+        }
+        .question {
+            display: inline;
+            font-family: 'Forum', cursive;
+            font-size: 9em;
+        }
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="question">
+            <%- question %>
+        </div>
+    </div>
+    <!--socket.io-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io()
+
+        socket.on('show question to board', msg => {
+            location.reload()
+        })
+
+        socket.on('show board to board', msg => {
+            console.log('test')
+            location.assign('/board')
+        })
+    </script>
+</body>
+</html>

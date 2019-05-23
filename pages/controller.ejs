@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jeopardy!</title>
+    <link rel="stylesheet" href="/public/controller/controller.css">
+    <link href="https://fonts.googleapis.com/css?family=Forum" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="question">
+            <div class="label">Round: </div>
+            <div class="dropdown">
+                <select name="round" id="">
+                    <% for (let i = 1; i <= JSON.parse(questions).length; i ++) { %>
+                        <option value="<%= i - 1 %>"><%= i %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="label">Category: </div>
+            <div class="dropdown">
+                <select name="category" id=""></select>
+            </div>
+            <div class="label">Value: </div>
+            <div class="dropdown">
+                <select name="question" id=""></select>
+            </div>
+            <div class="label">Remove: </div>
+            <div class="dropdown">
+                <input id="remove-question" type="checkbox" checked>
+            </div>
+            <div class="question-button btn">Show Question</div>
+            <div class="round-button btn">Show Board</div>
+        </div>
+        <div class="correct" data-id="">
+            <div>
+                <button class="yes">Y</button>
+            </div>
+            <div class="name">
+                <img src="" alt="" class="person">
+            </div>
+            <div>
+                <button class="no">N</button>
+            </div>
+            <div class='center'>
+                <input type="checkbox" id="buzzer-enabled">
+                <span class="buzzer-enabled">Buzzer Enabled</span>
+            </div>
+            <div class="center">
+                <audio controls loop src="/public/assets/background_music.mp3" id='background-music'></audio>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="show-question">
+            </div>
+            <div class="show-answer">
+            </div>
+        </div>
+        <div class="scoreboard">
+            <% for (let id in users) { %>
+                <div class="score" data-id="<%= decodeURIComponent(id) %>">
+                    <img src="<%= decodeURIComponent(users[id]) %>" alt="">
+                    <div class="score-label">
+                        $<%= scores[id].score %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <!--socket.io-->
+    <script src="/socket.io/socket.io.js"></script>
+    <!--EJS Variables-->
+    <script>
+        let questions = JSON.parse(`<%- decodeURIComponent(questions) %>`)
+        let users = JSON.parse(`<%- decodeURIComponent(JSON.stringify(users)) %>`)
+    </script>
+    <!--Dropdown Updater Script-->
+    <script src="/public/controller/dropdown.js"></script>
+    <!--Scoreboard Changes Script-->
+    <script src="/public/controller/scoreboard.js"></script>
+    <!--Question Selection and Socket Script-->
+    <script src="/public/controller/question.js"></script>
+</body>
+</html>

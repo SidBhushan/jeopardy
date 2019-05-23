@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jeopardy!</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #060CE9;
+            overflow: hidden;
+        }
+
+        button {
+            width: 100vw;
+            height: 100vh;
+            background-color: #060CE9;
+            border: none;
+            color: white;
+            font-size: 4em;
+            font-family: sans-serif;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image:url('/public/buzzer/background.svg')
+        }
+
+        button:active {
+            background-color: #3d42ff;
+            }
+    </style>
+</head>
+<body>
+    <button id="buzz"></button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const userID = '<%= id %>'
+        const socket = io()
+        socket.emit('login', userID)
+        let buzz = () => {
+            socket.emit('buzz to server', userID)
+        }
+        let button = document.getElementById('buzz')
+        button.addEventListener('click', e => {
+            console.log('test')
+            buzz()
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+body {
+    background-color: #00003A;
+    text-align: center;
+}
+
+#qr {
+    display: none;
+}
+
+canvas#qrcanvas {
+    height: 330px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 1em;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-family: sans-serif;
+    color: #ddd;
+}
+
+#names {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 0.5em;
+    grid-template-rows: minmax(100px, auto);
+    align-items: center;
+    justify-items: center;
+}
+
+.name {
+    color: #ddd;
+    font-size: 30px;
+    font-family: sans-serif;
+}

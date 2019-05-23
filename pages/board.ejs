@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jeopardy!</title>
+    <style>
+        :root {
+            --num-board-columns: <%= Object.keys(questions).length %>;
+            --num-score-columns: <%= Object.keys(scores).length %>;
+        }
+    </style>
+    <link rel="stylesheet" href="/public/board/board.css">
+</head>
+<body>
+    <div class="board">
+        <!--Category Headers-->
+        <% Object.keys(questions).forEach(category => { %>
+            <div class="header">
+                <%= category %>
+            </div>
+        <% }) %>
+        <!--Questions-->
+        <% for(let i = 0; i<questions[Object.keys(questions)[0]].length; i ++) { %>
+            <% Object.keys(questions).forEach(category => { %>
+                <div class="question <%= (questions[category][i].display) ? '':'empty' %>">
+                    <% if(questions[category][i].display) { %>
+                        $<%= questions[category][i].value %>
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+    <!--Scoreboard-->
+    <div class="scoreboard">
+        <!--Names-->
+        <% Object.keys(scores).forEach(name => { %>
+            <div class="name <%= scores[name].online ? '':'offline' %>">
+                <img src="<%= decodeURIComponent(users[name]) %>" alt="">
+            </div>
+        <% }) %>
+        <!--Scores-->
+        <% Object.keys(scores).forEach(name => { %>
+            <div class="score">
+                $<%= scores[name].score %>
+            </div>
+        <% }) %>
+    </div>
+    <!--socket.io-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/board/board.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jeopardy!</title>
+    <style>
+        body {
+            background-color: #00003A;
+            font-family: 'Helvetica', sans-serif;
+            color: white;
+            text-align: center;
+        }
+        .wrapper {
+            display: block;
+        }
+        canvas {
+            background-color: #060CE9;
+            margin: auto;
+        }
+        button#clear {
+            width: 50px;
+            height: 200px;
+            border-radius: 3px;
+            color: white;
+            background-color: #F32;
+            border: none;
+        }
+        button#submit {
+            margin-top: 1em;
+            background-color: #07F;
+            font-size: 3em;
+            border-radius: 0.25em;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Draw Your Name in the Box Below</h1>
+    <div class="wrapper">
+        <canvas id="sketchpad" height="200px" width="300px"></canvas>
+        <button id="clear"></button>
+    </div>
+    <script src="/public/sketchpad.js"></script>
+    <button id="submit">Join</button>
+    <script>
+        const submit = document.getElementById('submit')
+        const clear = document.getElementById('clear')
+        init('sketchpad')
+
+        clear.addEventListener('click', e => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        })
+
+        submit.addEventListener('click', e => {
+            let image = encodeURIComponent(canvas.toDataURL())
+                fetch('/join', {
+                    method: 'POST',
+                    body: JSON.stringify({data: image}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    response.json().then(obj => {
+                        location.assign('/buzzer/' + obj.id)
+                    })
+                })
+        })
+    </script>
+</body>
+</html>

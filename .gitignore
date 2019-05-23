@@ -1,0 +1,5 @@
+# data folder
+data/
+
+# dependencies
+node_modules/
