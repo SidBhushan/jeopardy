@@ -50,12 +50,26 @@ questionButton.addEventListener('click', e => {
 })
 
 roundButton.addEventListener('click', e => {
+    let audioElements = document.getElementsByTagName('audio').length
+    if (audioElements == 1) {
+        backgroundMusic.pause()
+        backgroundMusic.currentTime = 0
+    }
+    buzzerEnabled.checked = false
     socket.emit('show board to server', roundDropdown.value)
 })
 
 nameImage.addEventListener('click', e => {
     clearName()
     updateName()
+})
+
+noButton.addEventListener('click', async e => {
+    let audioElements = document.getElementsByTagName('audio').length
+    if (audioElements == 1) {
+        backgroundMusic.play()
+    }
+    buzzerEnabled.checked = true
 })
 
 updateName = () => {
@@ -77,6 +91,11 @@ clearName = () => {
 
 socket.on('buzz to controller', person => {
     if (buzzQueue.indexOf(person) < 0 && name != person && buzzerEnabled.checked) {
+        let audioElements = document.getElementsByTagName('audio').length
+        if (audioElements == 1) {
+            backgroundMusic.pause()
+        }
+        buzzerEnabled.checked = false
         buzzQueue.push(person)
         updateName()
     }

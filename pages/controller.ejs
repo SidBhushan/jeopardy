@@ -73,7 +73,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <!--EJS Variables-->
     <script>
-        let questions = JSON.parse(`<%- decodeURIComponent(questions) %>`)
+        let questions = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(questions) %>`))
         let users = JSON.parse(`<%- decodeURIComponent(JSON.stringify(users)) %>`)
     </script>
     <!--Dropdown Updater Script-->
