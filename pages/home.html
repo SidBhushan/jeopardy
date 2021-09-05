@@ -24,21 +24,23 @@
     <script>
         const context = document.getElementById('qrcanvas').getContext('2d')
         const img = document.getElementById('qr')
-        context.drawImage(img, 0, 0)
-
-        let imageData = context.getImageData(0, 0, 330, 330)
-        for (let i = 0; i < imageData.data.length; i += 4) {
-            if (imageData.data[i] == 0 && imageData.data[i+1] == 0 && imageData.data[i+2] == 0) {
-                imageData.data[i] = 0xdd
-                imageData.data[i+1] = 0xdd
-                imageData.data[i+2] = 0xdd
-            } else if (imageData.data[i] == 255 && imageData.data[i+1] == 255 && imageData.data[i+2] == 255) {
-                imageData.data[i] = 0x0
-                imageData.data[i+1] = 0x0
-                imageData.data[i+2] = 0x3a
+        
+        img.addEventListener('load', () => {
+            context.drawImage(img, 0, 0)
+            let imageData = context.getImageData(0, 0, 330, 330)
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                if (imageData.data[i] == 0 && imageData.data[i+1] == 0 && imageData.data[i+2] == 0) {
+                    imageData.data[i] = 0xdd
+                    imageData.data[i+1] = 0xdd
+                    imageData.data[i+2] = 0xdd
+                } else if (imageData.data[i] == 255 && imageData.data[i+1] == 255 && imageData.data[i+2] == 255) {
+                    imageData.data[i] = 0x0
+                    imageData.data[i+1] = 0x0
+                    imageData.data[i+2] = 0x3a
+                }
             }
-        }
-        context.putImageData(imageData, 0, 0)
+            context.putImageData(imageData, 0, 0)
+        })
     </script>
 
     <!--Names Script-->
